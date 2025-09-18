@@ -9,6 +9,7 @@ public class Rot13 {
 
     public static void main(String[] args) {
        String textCo = Rot13.codifica(text);
+       System.out.println(textCo);
 
     }
 
@@ -19,10 +20,26 @@ public class Rot13 {
             for (int e = 0 ; e < min.length ; e++){
                 char lletraMin = min[e];
                 char lletraMaj = maj[e];
+                int index = 0;
                 if (lletraMaj == lletraText){
-                    int index = (e + 13) % maj.length;
+                    if (e > (maj.length - 13)){
+                        index = (e + 13) % maj.length;
+                    }else{
+                        index = e + 13;
+                    }
+                    textCodificat += maj[index];
+                    break;
                 }else if(lletraMin == lletraText){
-                    
+                    if (e > (min.length - 13)){
+                        index = (e + 13) % min.length;
+                    }else{
+                        index = e + 13;
+                    }
+                    textCodificat += min[index];
+                    break;
+                }else{
+                    textCodificat += lletraText;
+                    break;
                 }
 
             }
