@@ -23,14 +23,14 @@ public class RotX {
             "Zmálx, zmá bc acñ nà?"
         };
 
-        String sorpresa = "Rétèp, rét ùú súë fu?";
+        String sorpresa = "Ùhügt, ùhü wx úxi ìv?";
 
         System.out.printf("Xifrat\n---------\n");
 
         for(int i = 0 ; i < textArray.length ; i++ ){
             String text = textArray[i];
             
-            String textACodi = RotX.xifraRotX(text, 1*2);
+            String textACodi = RotX.xifraRotX(text, i*2);
             System.out.printf("(%d)%-30s \t => %-30s\n",i*2 , text, textACodi);
         }
 
@@ -43,7 +43,7 @@ public class RotX {
             System.out.printf("(%d)%-30s \t => %-30s\n",i*2 , textC, codiAText);
         }
 
-        System.out.printf("\nMissatge xifrat:\n----------------n");
+        System.out.printf("\nMissatge xifrat: %s\n----------------\n", sorpresa);
 
         forcaBrutaRotX(sorpresa);
     }
@@ -93,29 +93,27 @@ public class RotX {
     }
 
     public static void forcaBrutaRotX(String sorpresa){
-        String textDescodificat = "";
-        for (int i = 0; i < sorpresa.length(); i++) {
-            boolean trobat = false;
-            char lletra = sorpresa.charAt(i);
-            for (int e = 0 ; e < min.length ; e++){
-                char lletraMin = min[e];
-                char lletraMaj = maj[e];
-                int index = 0;
-                if (lletraMaj == lletra){
-                    trobat = true;
-                    textDescodificat += maj[(i + maj.length ) % maj.length];
-                }else if(lletraMin == lletra){
-                    trobat = true;
-                    textDescodificat +=  min[(i + min.length) % min.length];
+        for(int x = 0 ; x < min.length ; x++ ){
+            String textDescodificat = "";
+            for (int i = 0; i < sorpresa.length(); i++) {
+                boolean trobat = false;
+                char lletra = sorpresa.charAt(i);
+                for (int e = 0 ; e < min.length ; e++){
+                    char lletraMin = min[e];
+                    char lletraMaj = maj[e];
+                    int index = 0;
+                    if (lletraMaj == lletra){
+                        trobat = true;
+                        textDescodificat += maj[(e - x + maj.length ) % maj.length];
+                    }else if(lletraMin == lletra){
+                        trobat = true;
+                        textDescodificat +=  min[(e - x + min.length) % min.length];
+                    }
                 }
+                if(!trobat){textDescodificat += lletra;}
             }
-            if(!trobat){textDescodificat += lletra;}
+            System.out.printf("(%d) -> %s\n", x, textDescodificat );
         }
-        for (int i = 0 ; i < min.length; i++){
-            System.out.printf("(%d)-> %s\n",i , textDescodificat);
-
-        }
-
     }
 
 }
