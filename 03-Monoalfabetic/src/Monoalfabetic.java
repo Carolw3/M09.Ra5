@@ -19,6 +19,8 @@ public class Monoalfabetic {
         System.out.println(alfabetPermutat);
         String cadenaXifrada = xifraMonoAlfa(text);
         System.out.println(cadenaXifrada);
+        String cadenaDesxifrada = desxifraMonoAlfa(cadenaXifrada);
+        System.out.println(cadenaDesxifrada);
     }
 
     private static String xifraMonoAlfa(String cadena){
@@ -45,6 +47,31 @@ public class Monoalfabetic {
             }
         }
         return xifrada;
+    }
+
+    private static String desxifraMonoAlfa(String cadena){
+        String desxifrada = "";
+        for(int i = 0 ; i < cadena.length() ; i++){
+            Boolean trobat = false;
+            char car = cadena.charAt(i);
+            for(int e = 0 ; e < alfabetPermutat.length ; e++){
+                if (Character.isUpperCase(car)){
+                    if (car == alfabetPermutat[e]){
+                        desxifrada += alfabet[e];
+                        trobat = true;
+                    }
+                }else if(Character.isLowerCase(car)){
+                    if(Character.toUpperCase(car) == alfabetPermutat[e]){
+                        desxifrada += Character.toLowerCase(alfabet[e]);
+                        trobat = true;
+                    }
+                }
+            }
+            if (!trobat){
+                desxifrada += car;
+            }
+        }
+        return desxifrada;
     }
 
     private static char[] permutaAlfabet(char[]alfabet){
