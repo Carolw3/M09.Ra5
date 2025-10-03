@@ -11,16 +11,30 @@ public class Monoalfabetic {
     static String majuscul = "AÀÁÄBCÇDEÈÉËFGHIÌÍÏJKLMNÑOÒÓÖPQRSTUÙÚÜVWXYZ";
     static char[] alfabet = majuscul.toCharArray();
 
-    static String text = "Hola que tal? Això está encriptat.";
-    public static char[] alfabetPermutat;
+    static String[] textos = {"Hola que tal? Això está encriptat.", "Com estás en 123", "-Veritat?!"};
+    static char[] alfabetPermutat;
 
     public static void main(String[] args) {
+        System.out.printf("Alfabet endresat\n----------------\n");
+        System.out.println(alfabet);
         alfabetPermutat = permutaAlfabet(alfabet);
+        System.out.printf("\nAlfabet permutat\n----------------\n");
         System.out.println(alfabetPermutat);
-        String cadenaXifrada = xifraMonoAlfa(text);
-        System.out.println(cadenaXifrada);
-        String cadenaDesxifrada = desxifraMonoAlfa(cadenaXifrada);
-        System.out.println(cadenaDesxifrada);
+
+        String cadenaDesxifrada = "";
+        String text = "";
+        String cadenaXifrada = "";
+
+        System.out.println("\nText d'entrada  \t\t\t Encriptat  \t\t\t\t Desencriptat");
+
+        for (int i = 0 ;i < textos.length ; i++){
+            text = textos[i];
+            cadenaXifrada = xifraMonoAlfa(text);
+            cadenaDesxifrada = desxifraMonoAlfa(cadenaXifrada);
+            System.out.printf("\n%-35s -> %-35s -> %-35s",text, cadenaXifrada, cadenaDesxifrada);
+        }
+        System.out.println();
+
     }
 
     private static String xifraMonoAlfa(String cadena){
