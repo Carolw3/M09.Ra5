@@ -71,11 +71,11 @@ public class XifradorAES implements Xifrador {
 
     @Override
     public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        
+            if (clau == null || clau.isEmpty()) {
+                throw new ClauNoSuportada("La clau no pot estar buida");
+            }
         try {
-        if (clau == null || clau.isEmpty()) {
-            throw new ClauNoSuportada("La clau no pot estar buida");
-        }
-
             byte[] resultat = xifraAES(msg, clau);
             return new TextXifrat(resultat);
 
@@ -88,11 +88,11 @@ public class XifradorAES implements Xifrador {
 
     @Override
     public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
-        try {
+        
         if (clau == null||clau.isEmpty()) {
             throw new ClauNoSuportada("La clau no pot estar buida");
         }
-
+        try {
             return desxifraAES(xifrat.getBytes(), clau);
 
         } catch (ClauNoSuportada e) {

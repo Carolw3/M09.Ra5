@@ -88,7 +88,7 @@ public class XifradorRotX implements Xifrador {
         if(clauInt < 0 || clauInt > 40){
             throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
         }
-        String xifrat = xifraRotX(clau, clauInt);
+        String xifrat = xifraRotX(msg, clauInt);
         return new TextXifrat(xifrat.getBytes());
 
     }
