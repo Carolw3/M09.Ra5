@@ -74,4 +74,39 @@ public class XifradorRotX implements Xifrador {
             System.out.printf("(%d) -> %s\n", x, textDescodificat );
         }
     }
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        int clauInt;
+        try {
+            clauInt = Integer.parseInt(clau);
+
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+
+        if(clauInt < 0 || clauInt > 40){
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+        String xifrat = xifraRotX(clau, clauInt);
+        return new TextXifrat(xifrat.getBytes());
+
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        int clauInt;
+        try {
+            clauInt = Integer.parseInt(clau);
+
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+
+        if(clauInt < 0 || clauInt > 40){
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+        String desxifrat = new String(xifrat.getBytes());
+        return desxifraRotX(desxifrat, clauInt);
+    }
 }

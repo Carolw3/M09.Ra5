@@ -5,12 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class XifradorMonoalfabetic implements Xifrador {
     String majuscul = "AÀÁÄBCÇDEÈÉËFGHIÌÍÏJKLMNÑOÒÓÖPQRSTUÙÚÜVWXYZ";
     char[] alfabet = majuscul.toCharArray();
 
     String[] textos = {"Hola que tal? Això está encriptat.", "Com estás en 123", "-Veritat?!"};
     char[] alfabetPermutat;
+
+    public XifradorMonoalfabetic(){
+        this.alfabetPermutat = permutaAlfabet(alfabet);
+    }
 
     public void main(String[] args) {
         System.out.printf("Alfabet endresat\n----------------\n");
@@ -102,4 +107,36 @@ public class XifradorMonoalfabetic implements Xifrador {
         
         return alfabetPermutat;
     }
+
+    @Override
+    public TextXifrat xifra(String missatge, String clau) throws ClauNoSuportada {
+        if (clau != null ) {
+            throw new ClauNoSuportada("No soporta clau !=null");
+        }
+
+        try {
+            String resultat = xifraMonoAlfa(missatge);
+            return new TextXifrat(resultat.getBytes("UTF-8"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        
+        if (clau != null) {
+            throw new ClauNoSuportada("No soporta clau !=null");
+        }
+
+        try {
+            String resultado = new String(xifrat.getBytes(), "UTF-8");
+            return desxifraMonoAlfa(resultado);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 }

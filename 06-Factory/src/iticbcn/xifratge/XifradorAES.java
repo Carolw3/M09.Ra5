@@ -71,12 +71,35 @@ public class XifradorAES implements Xifrador {
 
     @Override
     public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
-        throw new ClauNoSuportada("Not supported yet.");
+        try {
+        if (clau == null || clau.isEmpty()) {
+            throw new ClauNoSuportada("La clau no pot estar buida");
+        }
+
+            byte[] resultat = xifraAES(msg, clau);
+            return new TextXifrat(resultat);
+
+        } catch (ClauNoSuportada e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ClauNoSuportada("Error en el xifrat: " + e.getMessage());
+        }
     }
 
     @Override
     public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
-        throw new ClauNoSuportada("Not supported yet.");
+        try {
+        if (clau == null||clau.isEmpty()) {
+            throw new ClauNoSuportada("La clau no pot estar buida");
+        }
+
+            return desxifraAES(xifrat.getBytes(), clau);
+
+        } catch (ClauNoSuportada e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ClauNoSuportada("Error en el desxifrat: " + e.getMessage());
+        }
     }
 
 }
