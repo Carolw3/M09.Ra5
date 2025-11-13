@@ -8,7 +8,7 @@ public class Hashes {
 
     public long npass = 0;
 
-    private final char[] CHARSET = "abcdefABCDEF1234567890!.".toCharArray();
+    private final char[] CHARSET = "abcdefABCDEF1234567890!".toCharArray();
 
     private final int MAX_LEN = 6;
 
@@ -47,8 +47,8 @@ public class Hashes {
     }
 
     public String getPBKDF2AmbSalt(String pw, String salt) throws Exception {
-        int iterations = 1000;
-        int keyLength = 128; // bits -> 128 bits = 16 bytes
+        int iterations = 10000;
+        int keyLength = 128;
         PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), iterations, keyLength);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] key = skf.generateSecret(spec).getEncoded();
@@ -56,54 +56,53 @@ public class Hashes {
     }
 
     public String forcaBruta(String alg, String hash, String salt) throws Exception {
-        // resetear contador de intentos del objeto (no crear variable local)
-        this.npass = 0;
+    // contador de intentos
+    this.npass = 0;
 
-        for (int len = 1; len <= MAX_LEN; len++) {
-            // indices actúan como las posiciones del "odómetro"
-            int[] indices = new int[len]; // inicializado a 0s
+    for (int len = MAX_LEN; len >= 1; len--) {
+        int[] indices = new int[len];
 
-            // bucle hasta que el odómetro desborde (todas las combinaciones probadas)
-            while (true) {
-                // construir candidate a partir de indices
-                char[] candidateChars = new char[len];
-                for (int i = 0; i < len; i++) {
-                    candidateChars[i] = CHARSET[indices[i]];
-                }
-                String candidate = new String(candidateChars);
-
-                this.npass++;
-                String computed;
-                if ("SHA-512".equalsIgnoreCase(alg)) {
-                    computed = getSHA512AmbSalt(candidate, salt);
-                } else if ("PBKDF2".equalsIgnoreCase(alg)) {
-                    computed = getPBKDF2AmbSalt(candidate, salt);
-                } else {
-                    return null;
-                }
-
-                if (computed.equalsIgnoreCase(hash)) {
-                    return candidate;
-                }
-
-                int pos = len - 1;
-                while (pos >= 0) {
-                    indices[pos]++;
-                    if (indices[pos] < CHARSET.length) {
-                        break;
-                    } else {
-                        indices[pos] = 0;
-                        pos--;
-                    }
-                }
-
-                if (pos < 0) break;
+        while (true) {
+            // construir candidate a partir de indices
+            char[] candidateChars = new char[len];
+            for (int i = 0; i < len; i++) {
+                candidateChars[i] = CHARSET[indices[i]];
             }
-        }
+            String candidate = new String(candidateChars);
 
-        // si no troba res retorna null
-        return null;
+            this.npass++;
+            String computed;
+            if ("SHA-512".equalsIgnoreCase(alg)) {
+                computed = getSHA512AmbSalt(candidate, salt);
+            } else if ("PBKDF2".equalsIgnoreCase(alg)) {
+                computed = getPBKDF2AmbSalt(candidate, salt);
+            } else {
+                return null;
+            }
+
+            if (computed.equalsIgnoreCase(hash)) {
+                return candidate;
+            }
+
+            int pos = len - 1;
+            while (pos >= 0) {
+                indices[pos]++;
+                if (indices[pos] < CHARSET.length) {
+                    break;
+                } else {
+                    indices[pos] = 0;
+                    pos--;
+                }
+            }
+
+            if (pos < 0) break;
+        }
     }
+
+    // si no troba res retorna null
+    return null;
+}
+
 
     public String getInterval(long t1, long t2){
         long diff = Math.max(0, t2 - t1);
